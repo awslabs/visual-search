@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" ng-app="angApp">
+
+<head>
+
+  <meta charset="utf-8">
+  <title>Visual Search</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="app/css/app.css"/>
+
+</head>
+
+<body>
+
+  <img src="app/img/aws_logo.png" class="logo_image">
+
+  <ul class="menu">
+    <li><a ng-href="#/">Home Directory</a></li>
+    <li><a ng-href="#/settings">Settings</a></li>
+  </ul>
+  
+  <div ng-view class="views"></div>
+
+  <!-- LIBRARIES -->
+  
+  <!-- ANGULARJS LIBRARIES -->
+  <script src="app/lib/angular/angular.js"></script>
+  <script src="app/lib/angular/angular-resource.js"></script>
+  <script src="app/lib/angular/angular-route.js"></script>
+  
+  <!-- THIRD PARTY LIBRARIES -->
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.2.0.js"></script>
+
+  <!-- APP LIBRARIES -->
+  <script src="app/js/app.js"></script>
+  <script src="app/services/appConfig.js"></script>
+  <script src="app/services/services.js"></script>
+  <script src="app/filters/filters.js"></script>
+  <script src="app/directives/directives.js"></script>
+  
+  <!-- CONTROLLERS -->
+  <script src="app/controllers/mainControllers.js"></script>
+  <script src="app/controllers/searchControllers.js"></script>
+  
+</body>
+    
+</html>

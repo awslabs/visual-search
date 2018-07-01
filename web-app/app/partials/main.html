@@ -1,0 +1,28 @@
+<h1 class="lead" style="text-align: center; font-size: 32px; margin-top: 50px">Visual Search</h1>
+<h2 class="lead" style="text-align: center; font-size: 24px; margin-bottom: 50px">AWS DeepLens Hackathon</h2>
+
+<div class="well" ng-show="mainData.loggedIn == false">
+
+	<div>
+	  <form class="form-signin" ng-submit="login()">
+	  	<div class="form-error" ng-show="loginError">Enter Valid Username and Password</div>
+	    <div><input type='text' class="form-control" ng-model='mainData.user.userName' placeholder='username'/></div>
+	    <div><input type='password' class="form-control" ng-model='mainData.user.password' placeholder='password'/></div>
+	    <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Login"></div>
+	  </form>
+	</div>
+
+</div>
+
+<div class="well" style="width: 550px;" ng-show="mainData.loggedIn == true">
+
+	<h2 class="lead" style="font-size: 24px;">Directory</h2>
+	<ul class="list-group" style="width: 500px;">
+        
+      <li class="list-group-item"><a href="" id="search" ng-click="setToolType($event)">Visual Search Matches</a></li>    
+      <li class="list-group-item"><a href="" id="search" ng-click="setToolType($event)">Feedback</a></li>
+      <li class="list-group-item"><a href="" id="search" ng-click="setToolType($event)">Settings</a></li>
+
+	</ul>
+	
+</div>
