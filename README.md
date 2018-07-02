@@ -53,10 +53,10 @@ Open the web app code in a text editor that has a captive web server, such as th
 
 ## Testing
 
-In order to view test results in the web app, you'll need to populate the DynamoDB table with some test reference item data.  Some test data is supplied in the test directory of this repository, along with a Python 3 script for adding the data to DynamoDB.  Simply replace the filename ```features.json``` in the script with the filename of your test data, then execute the script with the following command in a directory that contains both the script and test data:
+In order to view test results in the web app, you'll need to populate the DynamoDB table with some test reference item data.  Some test data is supplied in the test directory of this repository, along with a Python 3 script for adding the data to DynamoDB.  Simply replace the filename ```metadata.json``` in the script with the filename of your test data, then execute the script with the following command in a directory that contains both the script and test data:
 
 ```
-python3 ./features_to_ddb.py
+python3 ./metadata_to_ddb.py
 ```
 
 Each time you add new reference item data to the DynamoDB table, you will need to restart the Search Lambda function so it picks up the new data.  One easy way to do this is simply re-deploy your existing code without changes.  
