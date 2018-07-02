@@ -85,12 +85,15 @@ def lambda_handler(event, context):
         matches = val
 
     # items returned by DynamoDB aren't in nearest match order -> rearrange
-    query_result = []
+    ordered_matches = []
     for index in ids:
         for match in matches:
             if match['id'] == index:
-                query_result.append(match)
+                ordered_matches.append(match)
                 continue
+
+    query_result = {}
+    query_result['matches'] = ordered_matches
 
     #---------------------------------------------
     #  Validate / return response
