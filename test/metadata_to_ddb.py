@@ -3,10 +3,10 @@ import json
 import os
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-table = dynamodb.Table('VisualSearchFeatures')
+table = dynamodb.Table('VisualSearchMetadata')
 
 
-with open('./features.json') as json_data:
+with open('./metadata.json') as json_data:
     products = json.load(json_data)
 
 for product in products:
