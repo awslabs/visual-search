@@ -1,37 +1,29 @@
 '''
 
-VISUAL SEARCH MATCHES LAMBDA FUNCTION
+VISUAL SEARCH MATCHES LOOKUP LAMBDA FUNCTION
 
 '''
 
 import boto3
-import redis
-import logging
 import json
+import logging
 import math
-import copy
-from queue import PriorityQueue
+import redis
 
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('VisualSearchFeatures')
+table_name = 'VisualSearchMetadata'
 r = redis.StrictRedis(  host='visual-search-2.de4w70.0001.use1.cache.amazonaws.com',
                         port=6379,
                         db=0,
                         decode_responses=True)
 
-
-
-# scan table outside handler so feature vectors are always available to lambda function
-ddb_response = table.scan()
-items = ddb_response['Items'] # returns a list of objects, but features are string
-logger.info('NUMBER OF ITEMS:  ' + str(len(items)))
-for e in items:
-    vec = e['features'].replace('[', '').replace(']', '').split(',')
-    e['features'] = [float(x) for x in vec]
+# TODO eliminate region and endpoint name specification
+runtime = boto3.client('runtime.sagemaker', region_name='us-west-2')
+endpoint_name = 'knn-2018-07-01-18-18-56-454'
 
 
 def lambda_handler(event, context):
@@ -40,39 +32,65 @@ def lambda_handler(event, context):
     #  UNPACK QUERY
     #---------------------------------------------
 
+    # disregard messages other than those containing features
     if 'features' not in event:
         logger.info(event)
         return
 
     query = event
+    # features are sent by the DeepLens device in CSV form
     query_features = query['features']
-    vec = query_features.split(',')
-    query_features = [float(x) for x in vec]
-    query_normalized = normalize(query_features)
+
+    #---------------------------------------------
+    #  k-NN INDEX LOOKUP
+    #---------------------------------------------
+
+    res = runtime.invoke_endpoint(
+                EndpointName=endpoint_name,
+                Body=query_features,
+                ContentType='text/csv',
+                Accept='application/json; verbose=true'
+            )
+
+    # extract reference item ids, convert them to a list of strings
+    neighbors = json.loads(res['Body'].read())
+    f_nb = (((neighbors['predictions'])[0])['labels'])
+    ids = [str(int(e)) for e in f_nb]
 
 
     #---------------------------------------------
-    #  COMPUTE COSINE SIMILARITY
+    #  METADATA LOOKUP
     #---------------------------------------------
 
-    q = PriorityQueue(maxsize=3) # maintains top closest matches
+    # batch request for reference item metadata
+    response = dynamodb.batch_get_item(
+                        RequestItems={
+                                table_name: {
+                                    'Keys': [
+                                        { 'id': ids[0] },
+                                        { 'id': ids[1] },
+                                        { 'id': ids[2] },
+                                        { 'id': ids[3] }
+                                    ],
+                                    'ConsistentRead': False,
+                                    'AttributesToGet': ['id', 'title', 'url']
+                                }
+                            },
+                          ReturnConsumedCapacity='TOTAL'
+                        )
 
-    for item in items:
-        cosine = cosine_similarity(query_normalized, item['features'])
-        checkHeap(q, (cosine, item))
 
-    top3 = []
-    while not q.empty():
-        top3.append(q.get())
-    top3.reverse() # in place
-    match_objects = [top[1] for top in top3]  # pull out dicts from top3 tuples of (cosine, match)
+    json_items = json.loads(json.dumps(response['Responses']))
+    for _, val in json_items.items():
+        matches = val
 
-    query_matches = match_objects
-    query_result = {}
-    match_copy = copy.deepcopy(query_matches) # avoid popping features from in-memory features store
-    for match in match_copy:
-        match.pop('features', None)
-    query_result['matches'] = match_copy
+    # items returned by DynamoDB aren't in nearest match order -> rearrange
+    query_result = []
+    for index in ids:
+        for match in matches:
+            if match['id'] == index:
+                query_result.append(match)
+                continue
 
     #---------------------------------------------
     #  Validate / return response
@@ -92,30 +110,4 @@ def lambda_handler(event, context):
 
     return response
 
-
-def cosine_similarity(query, to_compare):
-    # cosine is just dot product of two unit vectors since feature vectors in
-    # the data store for comparison are already normalized
-    return dot_product(query, to_compare)
-
-
-def normalize(vec):
-    magnitude = math.sqrt(sum([e**2 for e in vec]))
-    return [e/magnitude for e in vec]
-
-
-def dot_product(v1, v2):
-    return sum([i*j for i, j in zip(v1, v2)])
-
-
-def checkHeap(queue, num):
-    if not queue.full():
-        queue.put(num)
-        return
-    top = queue.get()
-    if num > top:
-        queue.put(num)
-    else:
-        queue.put(top)
-    return
 
