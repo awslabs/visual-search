@@ -8,7 +8,15 @@ import redis
 import logging
 import json
 
-r = redis.StrictRedis(host='visual-search-2.de4w70.0001.use1.cache.amazonaws.com', port=6379, db=0, decode_responses=True)
+#------------------------------------------
+# CONSTANTS
+#------------------------------------------
+
+redis_hostname = 'visual-search-2.de4w70.0001.use1.cache.amazonaws.com'
+
+#------------------------------------------
+
+r = redis.StrictRedis(host=redis_hostname, port=6379, db=0, decode_responses=True)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
