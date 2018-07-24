@@ -10,20 +10,26 @@ import logging
 import math
 import redis
 
+#------------------------------------------
+# CONSTANTS
+#------------------------------------------
+
+table_name = 'VisualSearchMetadata'
+endpoint_name = 'knn-2018-07-24-17-50-52-071'
+redis_hostname = 'visual-search-2.de4w70.0001.use1.cache.amazonaws.com'
+
+#------------------------------------------
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb')
-table_name = 'VisualSearchMetadata'
-r = redis.StrictRedis(  host='visual-search-2.de4w70.0001.use1.cache.amazonaws.com',
+r = redis.StrictRedis(  host=redis_hostname,
                         port=6379,
                         db=0,
                         decode_responses=True)
 
-# TODO eliminate region and endpoint name specification
-runtime = boto3.client('runtime.sagemaker', region_name='us-west-2')
-endpoint_name = 'knn-2018-07-01-18-18-56-454'
+runtime = boto3.client('runtime.sagemaker')
 
 
 def lambda_handler(event, context):
