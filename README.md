@@ -53,8 +53,8 @@ Each time you add new reference item data to the DynamoDB table, you will need t
 
 
 
-# License & Contributing
+# Licensing & Contributing
 
 The contents of this repository are licensed under the [Apache 2.0 License](./LICENSE). 
-If you are interested in contributing to this project, please see the [Contributing Guidelines](./contributing/CONTRIBUTING.md).  In connection with contributing, also review the [Code of Conduct](./contributing/CODE_OF_CONDUCT.md).
+If you are interested in contributing to this project, please see the [Contributing Guidelines](./contributing/CONTRIBUTING.md).  In connection with contributing, also review the [Code of Conduct](./contributing/CODE_OF_CONDUCT.md).  In this project’s Jupyter notebook, two datasets are used: a small, toy dataset, and a larger dataset of Amazon.com product images used in the paper by J. McAuley et al (2015), “Image-based recommendations on styles and substitutes,” SIGIR. 
 
