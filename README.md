@@ -20,7 +20,7 @@ The following instructions cover setup of the minimum number of pieces needed to
      
 2.  **Data Store setup**:  This project makes use of two separate data stores.
       - **ElastiCache Redis**:  using the ElastiCache console, create a one-node Redis cluster.  Under **Advanced Redis settings**, make sure the default VPC and default security group are selected.  For testing purposes, you can set the instance type and size to ```cache.t2.micro```.  Make a note of the Primary Endpoint URL after creation.  
-      - **DynamoDB**:  using the DynamoDB console, create a table named ```VisualSearchFeatures```.  Set the table's Partition key to be a String named **id**.  
+      - **DynamoDB**:  using the DynamoDB console, create a table named ```VisualSearchFeatures```.  Set the table's Partition key to be a String named **id**. Either now or later you can populate the DynamoDB table with reference item metadata (product titles, image URLs etc.), as discussed below in the **Populating the Metadata** section of these instructions.
      
 3.  **API and Search Lambda function setup**:  To create and deploy these Lambda functions, it is recommended (but not necessary) to use the AWS Cloud9 IDE for ease of use, and its built-in management capabilities for serverless applications using AWS Serverless Application Model (SAM).
       - **VPC note**:  both Lambda functions must be associated with a VPC because they need to communicate with ElastiCache Redis.  If you are using SAM either with Cloud9 or separately, see the file ```template.yaml``` in this repository for an example of VPC configuration.  Be sure the security group you specify for the Lambda functions is the same as the one for the ElastiCache Redis cluster.  For simplicity of test setup, the default security group is suggested (though not for a production environment).  
@@ -41,19 +41,18 @@ The following instructions cover setup of the minimum number of pieces needed to
 Open the web app code in a text editor that has a captive web server, such as the Brackets editor.  Highlight the index.html file, then launch the web server, which will open a browser window.  In the web app UI, click through the **Visual Search** link. After you add reference item data to DynamoDB (see **Testing** section below), you should see matches populating the UI after a few seconds.
 
 
-## Testing
+## Populating the Metadata
 
-In order to view test results in the web app, you'll need to populate the DynamoDB table with some test reference item data.  Some test data is supplied in the test directory of this repository, along with a Python 3 script for adding the data to DynamoDB.  Simply replace the filename ```metadata.json``` in the script with the filename of your test data, then execute the script with the following command in a directory that contains both the script and test data:
+In order to view test results in the web app, you'll need to populate the DynamoDB table created above with some reference item data.  To extract reference item metadata, please refer to the “Extract the Metadata” section of the Jupyter notebook [**Visual Search**](./notebooks/visual-search-feature-generation.ipynb). The code there writes the metadata out in JSON format to a file. 
+
+Some (very small) test data is supplied in the test directory of this repository, along with a Python 3 script for importing the data to DynamoDB.  Simply replace the filename ```metadata.json``` in the script with the filename of your test data, then execute the script with the following command in a directory that contains both the script and test data:
 
 ```
 python3 ./metadata_to_ddb.py
 ```
 
-Each time you add new reference item data to the DynamoDB table, you will need to restart the Search Lambda function so it picks up the new data.  One easy way to do this is simply re-deploy your existing code without changes.  
 
-
-
-# Licensing & Contributing
+# Licenses & Contributing
 
 The contents of this repository are licensed under the [Apache 2.0 License](./LICENSE). 
 If you are interested in contributing to this project, please see the [Contributing Guidelines](./contributing/CONTRIBUTING.md).  In connection with contributing, also review the [Code of Conduct](./contributing/CODE_OF_CONDUCT.md).  In this project’s Jupyter notebook, two datasets are used: a small, toy dataset, and a larger dataset of Amazon.com product images used in the paper by J. McAuley et al (2015), “Image-based recommendations on styles and substitutes,” SIGIR. 
