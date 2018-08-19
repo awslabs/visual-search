@@ -12,11 +12,14 @@ import redis
 
 #------------------------------------------
 # CONSTANTS
+#
+# replace <your-kNN-endpoint-name>
+# replace <your-redis-endpoint>
 #------------------------------------------
 
 table_name = 'VisualSearchMetadata'
-endpoint_name = 'knn-2018-07-24-17-50-52-071'
-redis_hostname = 'visual-search-2.de4w70.0001.use1.cache.amazonaws.com'
+endpoint_name = '<your-kNN-endpoint-name>'
+redis_hostname = '<your-redis-endpoint>'
 
 #------------------------------------------
 
