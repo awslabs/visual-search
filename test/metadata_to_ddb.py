@@ -2,7 +2,7 @@ import boto3
 import json
 import os
 
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('VisualSearchMetadata')
 
 
