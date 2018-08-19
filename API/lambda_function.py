@@ -10,9 +10,11 @@ import json
 
 #------------------------------------------
 # CONSTANTS
+#
+# replace <your-redis-endpoint>
 #------------------------------------------
 
-redis_hostname = 'visual-search-2.de4w70.0001.use1.cache.amazonaws.com'
+redis_hostname = '<your-redis-endpoint>'
 
 #------------------------------------------
 
