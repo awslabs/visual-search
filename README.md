@@ -45,7 +45,7 @@ Open the web app code in a text editor that has a captive web server, such as th
 
 In order to view test results in the web app, you'll need to populate the DynamoDB table created above with some reference item data.  To extract reference item metadata, please refer to the “Extract the Metadata” section of the Jupyter notebook [**Visual Search**](./notebooks/visual-search-feature-generation.ipynb). The code there writes the metadata out in JSON format to a file. 
 
-Some (very small) test data is supplied in the test directory of this repository, along with a Python 3 script for importing the data to DynamoDB named ```metadata-to-ddb.py```.  Execute the script with the following command in a directory that contains both the script and test data:
+Some sample test data is supplied in the test directory of this repository, including a very small sample and a larger sample of Amazon.com product metadata, including image URLs.  There also is a Python 3 script named ```metadata-to-ddb.py``` for importing the data to DynamoDB .  Execute the script with the following command in a directory that contains both the script and test data:
 
 ```
 python3 ./metadata_to_ddb.py
