@@ -10,7 +10,7 @@ Briefly, here’s how the system works. When shown a real world, physical item, 
 
 ![Overview](./images/diagram-large.png)
 
-
+##
 ## How to Deploy1
 In order to deploy this project, you'll need to spin up multiple pieces of infrastructure.  Before doing so, please go through the Jupyter notebook in the notebooks directory to gain a deeper understanding of what is happening under the hood:  [**Visual Search notebook**](./notebooks/visual-search-feature-generation.ipynb).  The notebook also prepares the model you'll deploy to the AWS DeepLens device.
 
