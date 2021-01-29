@@ -1,5 +1,6 @@
 # Visual Search with Amazon SageMaker and AWS DeepLens
 
+
 This repository provides resources for implementing a visual search engine. Visual search is the central component of an interface where instead of asking for something by voice or text, you *show* what you are looking for. For an in-depth discussion of how visual search works and this project, see the related blog post series on the AWS Machine Learning Blog:
 
 -  [Visual search on AWS—Part 1: Engine implementation with Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/visual-search-on-aws-part-1-engine-implementation-with-amazon-sagemaker/)
